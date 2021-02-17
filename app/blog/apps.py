@@ -13,4 +13,4 @@ class BlogConfig(AppConfig):
     Документация: https://docs.djangoproject.com/en/3.1/ref/applications/
     """
     name = 'blog'
-    verbose_name = 'Статьи для блога'
+    verbose_name = 'Статьи для блога'  # Отображение в админке

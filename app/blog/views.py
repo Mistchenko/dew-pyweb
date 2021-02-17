@@ -1,11 +1,23 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.apps import apps
+
+from .models import Note
 
 
 class BlogListView(APIView):
     """ BlogListView """
     def get(self, request):
-        return Response({
-            'verbose_name': apps.get_app_config('blog').verbose_name
-        })
+        notes = Note.objects.filter(public=True)
+
+        res = []
+        for note in notes:
+            res.append({
+                'id': note.id,
+                'title': note.title,
+                'author': {
+                    'id': note.author.id,
+                    'username': note.author.username,
+                }
+            })
+
+        return Response(res)
