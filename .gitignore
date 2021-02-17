@@ -15,3 +15,6 @@ venv/
 
 # DB
 *.sqlite3
+
+# Django local settings
+settings_local.py

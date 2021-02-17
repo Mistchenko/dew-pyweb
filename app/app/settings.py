@@ -16,6 +16,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+
+    'blog.apps.BlogConfig'
 ]
 
 MIDDLEWARE = [
@@ -56,25 +58,22 @@ DATABASES = {
 }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
 
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGE_CODE = 'ru'
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
+USE_I18N = True  # Включить систему перевода, так же для валидаторов DRF
+USE_L10N = True  # Включить форматирование для текущей локали
+USE_TZ = False   # Учитывать timezone
 
 STATIC_URL = '/static/'
+
+try:
+    from .settings_local import *
+except ImportError:
+    pass
