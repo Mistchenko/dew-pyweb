@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Note
+from blog.models import Note
 
 
 class NoteSerializer(serializers.ModelSerializer):

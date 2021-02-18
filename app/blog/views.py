@@ -1,7 +1,10 @@
+from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .models import Note
+from .serializers import NoteSerializer
 
 
 class BlogListView(APIView):
@@ -21,3 +24,8 @@ class BlogListView(APIView):
             })
 
         return Response(res)
+
+
+class BlogViewMix(generics.ListAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
