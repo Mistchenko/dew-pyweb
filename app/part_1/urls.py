@@ -7,9 +7,9 @@ from . import views
 
 # Для ViewSet
 router = DefaultRouter()
-router.register(r'method3', views.Method3ViewSet, basename='method-3')
+router.register(r'method3', views.Method3ViewSet, basename='method3')
 
-app_name = 'part_1'
+app_name = 'part-1'
 urlpatterns = [
     path('method1/', views.Method1View.as_view(), name='method-1'),
     path('method2/', views.Method2View.as_view(), name='method-2'),
