@@ -1,15 +1,19 @@
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+
 from rest_framework import routers
 
 from . import views
 
-# router = routers.SimpleRouter()
-# router.register(r'mix/', views.BlogViewMix)
+# Для ViewSet
+router = DefaultRouter()
+router.register(r'method3', views.Method3ViewSet, basename='method-3')
 
-app_name = 'demo'
+app_name = 'part_1'
 urlpatterns = [
-    path('v1/', views.Demo1.as_view(), name='demo-1'),
-    path('v2/', views.Demo2.as_view(), name='demo-2'),
-    path('v3/', views.Demo3.as_view(), name='demo-3'),
-    # path('', include(router.urls))
+    path('method1/', views.Method1View.as_view(), name='method-1'),
+    path('method2/', views.Method2View.as_view(), name='method-2'),
+    path('method2/detail/<int:pk>/', views.Method2DetailView.as_view(), name='method-2-detail'),
+    # Для ViewSet
+    path('', include(router.urls))
 ]
