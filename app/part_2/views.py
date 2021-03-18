@@ -1,4 +1,6 @@
 import json
+
+from django.db.models import Q, F
 from django.http import JsonResponse
 from django.views import View
 from django.contrib.auth.models import User
@@ -16,8 +18,9 @@ class DjView(View):
             note_model = get_object_or_404(models.Note, pk=note['note_id'])
             notes = [note_serializer(note_model), ]
         else:
-            note_model = models.Note.objects.all()
+            note_model = models.Note.objects.filter(title='title')
             note_model = note_model.order_by('-date_add', 'title')
+            # Это НЕ срез, это переопределенная реализация [ OFFSET : LIMIT ]
             # note_model = note_model[0:3]
             notes = [note_serializer(note) for note in note_model]
 
@@ -38,6 +41,8 @@ class DjView(View):
             public=note.get('public', False),
             author=author
         )
+
+        note_model['public']=False
 
         # Сохранение отдельной строкой
         note_model.save()
