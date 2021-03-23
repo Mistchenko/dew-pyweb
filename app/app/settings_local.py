@@ -1,2 +1,4 @@
 AUTH_PASSWORD_VALIDATORS = []
 ALLOWED_HOSTS = ['*']
+# USE_TZ = True
+# TIME_ZONE = 'Europe/Moscow'

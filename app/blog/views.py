@@ -40,15 +40,32 @@ class NoteEditorView(APIView):
     def post(self, request):
         """ Новая статья для блога """
 
-        new_note = NoteEditorSerializer(
-            data={
-                **request.data,
-                'author': request.user.pk
-            }
-        )
+        # Передаем в сериалайзер (валидатор) данные из запроса
+        new_note = NoteEditorSerializer(data=request.data)
+
+        # Проверка параметров
+        if new_note.is_valid():
+            # Записываем новую статью и добавляем текущего пользователя как автора
+            new_note.save(author=request.user)
+            return Response(new_note.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(new_note.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, note_id):
+
+        # Находим редактируемую статью
+        note = Note.objects.filter(pk=note_id, author=request.user).first()
+        if not note:
+            raise NotFound(f'Статья с id={note_id} для пользователя {request.user.username} не найдена')
+
+        # Для сохранения изменений необходимо передать 3 параметра
+        # Объект связанный со статьей в базе: `note`
+        # Изменяемые данные: `data`
+        # Флаг частичного оновления (т.е. можно проигнорировать обязательные поля): `partial`
+        new_note = NoteEditorSerializer(note, data=request.data, partial=True)
 
         if new_note.is_valid():
             new_note.save()
-            return Response(new_note.data, status=status.HTTP_201_CREATED)
+            return Response(new_note.data, status=status.HTTP_200_OK)
         else:
             return Response(new_note.errors, status=status.HTTP_400_BAD_REQUEST)
