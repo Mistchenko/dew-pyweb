@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 
-from .models import Note
+from .models import Note, Comment
 
 # Меняем формат вывода даты и времени только для РУССКОЙ локализации
 # Для всего сайта надо поместить этот код в `settings.py`
@@ -32,3 +32,8 @@ class NoteAdmin(admin.ModelAdmin):
         if not hasattr(obj, 'author') or not obj.author:
             obj.author = request.user
         super().save_model(request, obj, form, change)
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    pass
