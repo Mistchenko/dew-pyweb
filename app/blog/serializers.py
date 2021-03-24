@@ -16,10 +16,11 @@ class NotesSerializer(serializers.ModelSerializer):
 
     # Меняем вывод, вместо `ID` пользователя будет `Имя`
     author = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    average_rating = serializers.DecimalField(max_digits=6, decimal_places=5)
 
     class Meta:
         model = Note
-        fields = ('id', 'title', 'message', 'date_add', 'author', )
+        fields = ('id', 'title', 'message', 'date_add', 'author', 'average_rating')
 
 
 class CommentsSerializer(serializers.ModelSerializer):

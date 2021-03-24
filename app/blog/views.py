@@ -1,3 +1,5 @@
+from django.db.models import Avg
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,7 +15,17 @@ class NotesView(APIView):
 
     def get(self, request):
         """ Получить статьи для блога """
-        notes = Note.objects.filter(public=True).order_by('-date_add', 'title')
+
+        # Это НЕ оптимизированный запрос
+        # notes = Note.objects.filter(public=True).order_by('-date_add', 'title')
+
+        # `select_related` - это оптимизация запроса (join). Отношение Один к Одному
+        # https://django.fun/docs/django/ru/3.1/ref/models/querysets/#select-related
+        notes = Note.objects.filter(public=True).order_by('-date_add', 'title').select_related('author')
+
+        # Рассчитать средний рейтинг
+        notes = notes.annotate(average_rating=Avg('comments__rating'))
+
         serializer = NotesSerializer(notes, many=True)
 
         return Response(serializer.data)
@@ -24,7 +36,19 @@ class NoteDetailView(APIView):
 
     def get(self, request, note_id):
         """ Получить статю """
-        note = Note.objects.filter(pk=note_id, public=True).first()
+
+        # Это НЕ оптимизированный запрос
+        # note = Note.objects.filter(pk=note_id, public=True).first()
+
+        # `prefetch_related` - это оптимизация запроса для отношения Многие к Одному
+        # https://django.fun/docs/django/ru/3.1/ref/models/querysets/#prefetch-related
+        note = Note.objects.select_related(
+            'author'
+        ).prefetch_related(
+            'comments'
+        ).filter(
+            pk=note_id, public=True
+        ).first()
 
         if not note:
             raise NotFound(f'Опубликованная статья с id={note_id} не найдена')
