@@ -69,3 +69,9 @@ class NoteEditorView(APIView):
             return Response(new_note.data, status=status.HTTP_200_OK)
         else:
             return Response(new_note.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommentsView(APIView):
+    """ Комментарии к статье """
+    def get(self):
+        return Response({})

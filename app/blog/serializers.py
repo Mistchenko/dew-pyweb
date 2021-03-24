@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Note
+from .models import Note, Comment
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -17,17 +17,24 @@ class NotesSerializer(serializers.ModelSerializer):
     # Меняем вывод, вместо `ID` пользователя будет `Имя`
     author = serializers.SlugRelatedField(slug_field='username', read_only=True)
 
-    # Этого поля нет в модели, это демонстрация, в данном случае не имеет практического применения
-    ext_field = serializers.CharField(default='Внешний параметр')
-
     class Meta:
         model = Note
-        fields = ['id', 'title', 'message', 'date_add', 'author', 'ext_field', ]
+        fields = ['id', 'title', 'message', 'date_add', 'author', ]
+
+
+class CommentsSerializer(serializers.ModelSerializer):
+    """ Комментарии и оценки к статьям """
+    author = AuthorSerializer(read_only=True)
+
+    class Meta:
+        model = Comment
+        exclude = ('note', )  # Исключить эти поля
 
 
 class NoteDetailSerializer(serializers.ModelSerializer):
     """ Одна статья блога """
     author = AuthorSerializer(read_only=True)
+    comments = CommentsSerializer(many=True, read_only=True)
 
     class Meta:
         model = Note
