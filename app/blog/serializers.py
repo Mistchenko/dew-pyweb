@@ -74,8 +74,9 @@ class NoteEditorSerializer(serializers.ModelSerializer):
 
 
 class NoteMiniSerializer(serializers.ModelSerializer):
-    model = Note
-    fields = "__all__"
+    class Meta:
+        model = Note
+        fields = ('id', 'title', )
 
 
 class CommentAddSerializer(serializers.ModelSerializer):
