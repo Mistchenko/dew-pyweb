@@ -8,7 +8,7 @@ class AuthorSerializer(serializers.ModelSerializer):
     """ Автор """
     class Meta:
         model = User
-        fields = ('id', 'username', )
+        fields = ('id', 'username', 'first_name', )
 
 
 class NotesSerializer(serializers.ModelSerializer):
