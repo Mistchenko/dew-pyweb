@@ -1,0 +1,61 @@
+Развертывание django на сервере
+
+sudo apt update && sudo apt upgrade -y
+sudo apt install python3-pip
+pip3 install django
+pip3 install djangorestframework
+
+Делаем тестовый проект
+
+django-admin startproject my_app
+cd ./my_app
+
+Проверяем в режиме разработчика 
+python3 ./manage.py runserver 0.0.0.0:8000
+Проверяем в браузере: http://{ip_address_server}:8000/
+Останавливаем сервис: Ctrl+C
+
+sudo ln -s ~/my_app/ /var/www/my_app
+
+Устанавливаем uWSGI
+pip3 install uwsgi
+
+
+Запускаем через uWSGI
+uwsgi --http :8000 --module my_app.wsgi
+Проверяем в браузере: http://{ip_address_server}:8000/
+Останавливаем сервис: Ctrl+C
+
+Установка web-сервера nginx
+sudo apt install nginx
+Проверяем nginx в браузере: http://{ip_address_server}/
+Откроется страница: "Welcome to nginx!"
+
+Установка и конфигурация supervisor
+sudo apt install supervisor
+
+sudo ln -s ~/my_app/server.conf/app.supervisor.conf /etc/supervisor/conf.d/my_app.conf
+
+Перечитать конфигурацию:
+sudo supervisorctl update
+
+Посмотреть статус процессов
+sudo supervisorctl status
+
+Перезапустить наш проект после изменений:
+sudo supervisorctl restart my_app
+
+Конфигурация виртуального хоста
+sudo ln -s ~/my_app/server.conf/app.nginx.conf /etc/nginx/sites-enabled/my_app.conf
+sudo systemctl restart nginx
+
+Добавить в settings.py
+STATIC_ROOT = BASE_DIR / "static"
+
+Собрать все статические файлы
+python3 manage.py collectstatic
+
+Перезапустить наш проект после изменений:
+sudo supervisorctl restart my_app
+
+
