@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics, status, viewsets, permissions
 
+from blog.models import Note
 from part_1.models import Article
 from part_1.serializers import ArticleSerializer
 
@@ -13,8 +14,10 @@ def home(request):
     # Объект который будет передан в шаблон
     context = {
         'message': 'Добро пожаловать',
-        'left': 'сообщение слева',
-        'right': 'сообщение справа',
+        'left': 'генератор списка',
+        'right': 'записи из базы данных',
+        'data': [{'id': i, 'name': f'Name {i}'} for i in range(3)],
+        'notes': Note.objects.all()
     }
 
     # Рендеринг шаблона с последующим ответом клиенту

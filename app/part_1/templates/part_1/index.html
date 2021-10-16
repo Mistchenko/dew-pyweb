@@ -15,20 +15,41 @@
 <div class="container px-4">
     <div class="alert alert-success" role="alert">
         {{ message }}
+        <b>
         {% if user.is_authenticated %}
-            {{ user }}
+            {{ user.first_name }}
         {% else %}
             анонимный пользователь
         {% endif %}
-
+        </b> !
     </div>
 
     <div class="row gx-5">
         <div class="col">
-            <div class="p-3 border bg-light">Это: {{ left }}</div>
+            <div class="p-3 border bg-light">
+                Тут {{ left }}
+                <h3>Data</h3>
+                <div class="row gx-5">
+                    {% for item in data%}
+                        <p>
+                        {{ item.id }}: {{ item.name }}
+                        </p>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
         <div class="col">
-            <div class="p-3 border bg-light">Это: {{ right }}</div>
+            <div class="p-3 border bg-light">
+                Здесь {{ right }}
+                <h3>Notes</h3>
+                <ul>
+                    {% for note in notes%}
+                    <li>
+                        Заголовок: {{ note.title }}, дата публикации: {{ note.date_add|date:"D d M Y" }}:
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 </div>
