@@ -52,6 +52,10 @@ class Method2View(generics.ListCreateAPIView):
 
 
 class Method2DetailView(generics.RetrieveUpdateDestroyAPIView):
+    """ CRUD для записи
+    Все возможные миксины
+    https://www.django-rest-framework.org/api-guide/generic-views/#mixins
+    """
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
