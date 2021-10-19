@@ -14,7 +14,7 @@
 <body>
 <div class="container px-4">
     <div class="alert alert-success" role="alert">
-        {{ message }}
+        {{ title }}
         <b>
         {% if user.is_authenticated %}
             {{ user.first_name }}
@@ -45,7 +45,8 @@
                 <ul>
                     {% for note in notes%}
                     <li>
-                        Заголовок: {{ note.title }}, дата публикации: {{ note.date_add|date:"D d M Y" }}:
+                        Заголовок: {{ note.title }},
+                        <br>дата публикации: {{ note.date_add|date:"D d M Y" }}:
                     </li>
                     {% endfor %}
                 </ul>
