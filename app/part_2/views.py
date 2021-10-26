@@ -9,10 +9,24 @@ from django.shortcuts import get_object_or_404
 from blog import models
 from .serializers import note_serializer
 
+""" Примеры SQL запросов
+insert into blog_note
+    (title, message, public, date_add, author_id)
+values
+    ('title', 'сообщение', true, datetime('now'), 1)
+;
+
+update blog_note set title='Заголовок', public=false where author_id=1;
+
+delete from blog_note where author_id=1;
+
+select * from blog_note where id=6;
+"""
 
 class DjView(View):
     def get(self, request):
         if request.body:
+            """ body: {"note_id":6} """
             note = json.loads(request.body)
             # Документация https://docs.djangoproject.com/en/3.1/topics/http/shortcuts/#get-object-or-404
             note_model = get_object_or_404(models.Note, pk=note['note_id'])
