@@ -45,7 +45,7 @@
                 <ul>
                     {% for note in notes%}
                     <li>
-                        Заголовок: {{ note.title }},
+                        <h3 style="color: red; font-size: 9px;">Заголовок: {{ note.title }}</h3>,
                         <br>дата публикации: {{ note.date_add|date:"D d M Y" }}:
                     </li>
                     {% endfor %}
