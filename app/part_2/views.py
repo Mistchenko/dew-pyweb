@@ -1,7 +1,7 @@
 import json
 
 from django.db.models import Q, F
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views import View
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
@@ -32,7 +32,7 @@ class DjView(View):
             note_model = get_object_or_404(models.Note, pk=note['note_id'])
             notes = [note_serializer(note_model), ]
         else:
-            note_model = models.Note.objects.filter(title='title')
+            note_model = models.Note.objects.all()#.filter(title='title')
             note_model = note_model.order_by('-date_add', 'title')
             # Это НЕ срез, это переопределенная реализация [ OFFSET : LIMIT ]
             # note_model = note_model[0:3]
@@ -56,7 +56,7 @@ class DjView(View):
             author=author
         )
 
-        note_model['public']=False
+        # note_model['public']=False
 
         # Сохранение отдельной строкой
         note_model.save()
@@ -66,7 +66,13 @@ class DjView(View):
     def patch(self, request):
         # Изменение существующей записи
         note = json.loads(request.body)
-        note_model = models.Note.objects.get(pk=note['id'])
+        # note_model = models.Note.objects.get(pk=note['id'])
+        note_model = models.Note.objects.filter(pk=note['id']).first()
+
+        if not note_model:
+            # return HttpResponse(f'error, no id {note["id"]}', status=404)
+            return JsonResponse({'error': f'error, no id {note["id"]}'}, status=404)
+
         if note.get('title'):
             note_model.title = note.get('title')
         if note.get('message'):
