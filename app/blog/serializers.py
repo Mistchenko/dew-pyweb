@@ -37,7 +37,8 @@ class NoteDetailSerializer(serializers.ModelSerializer):
         """ Переопределение вывода. Меняем формат даты в ответе """
         ret = super().to_representation(instance)
         # Конвертируем строку в дату по формату
-        date_add = datetime.strptime(ret['date_add'], '%Y-%m-%dT%H:%M:%S.%f')
+        # date_add = datetime.strptime(ret['date_add'], '%Y-%m-%dT%H:%M:%S.%f') # Для даты с миллисекундами
+        date_add = datetime.strptime(ret['date_add'], '%Y-%m-%dT%H:%M:%S')
         # Конвертируем дату в строку в новом формате
         ret['date_add'] = date_add.strftime('%d %B %Y %H:%M:%S')
         return ret
