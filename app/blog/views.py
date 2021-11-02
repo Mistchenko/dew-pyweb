@@ -20,12 +20,12 @@ class NotesView(APIView):
         """ Получить статьи для блога """
 
         # Это НЕ оптимизированный запрос
-        # notes = Note.objects.filter(public=True).order_by('-date_add', 'title')
+        notes = Note.objects.filter(public=True).order_by('-date_add', 'title')
 
         # `select_related` - это оптимизация запроса (join). Отношение Один к Одному
         # https://django.fun/docs/django/ru/3.1/ref/models/querysets/#select-related
-        notes = Note.objects.filter(public=True).order_by('-date_add', 'title').select_related('author')
-        notes = notes.only('id', 'title', 'message', 'date_add', 'author__username')
+        # notes = Note.objects.filter(public=True).order_by('-date_add', 'title').select_related('author')
+        # notes = notes.only('id', 'title', 'message', 'date_add', 'author__username')
 
         # Рассчитать средний рейтинг
         notes = notes.annotate(average_rating=Avg('comments__rating'))
