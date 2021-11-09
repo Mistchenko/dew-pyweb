@@ -15,12 +15,14 @@ class ProductsView(APIView):
         query_params = QuerySerializer(data=request.query_params)
         if query_params.is_valid():
             if query_params.data.get('group'):
-                q_group = Q()
-                for grp in query_params.data['group']:
-                    q_group |= Q(group=grp)
-                products_model = products_model.filter(q_group)
+                products_model = products_model.filter(group__in=query_params.data['group'])
         else:
             return Response(query_params.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Пример с ИЛИ
+        # p1 = Q(group=1)
+        # p2 = Q(discount=0)
+        # products_model = products_model.filter(p1 | p2)
 
         # Получаем минимальную скидку скидку
         min_price = products_model.aggregate(res=Min('price'))
