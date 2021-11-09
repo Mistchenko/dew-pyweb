@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.db.models import Q, F, Min
+from django.db.models import Q, F, Min, Max
 
 from .models import Product
 from .serializers import ProductsSerializer, QuerySerializer
@@ -24,8 +24,8 @@ class ProductsView(APIView):
         # p2 = Q(discount=0)
         # products_model = products_model.filter(p1 | p2)
 
-        # Получаем минимальную скидку скидку
-        min_price = products_model.aggregate(res=Min('price'))
+        # Получаем минимальную и максимальную цены
+        prices = products_model.aggregate(min_price=Min('price'), max_price=Max('price'))
 
         # Расчет цены продажи
         price_sell = F('price')*F('discount')
@@ -33,6 +33,7 @@ class ProductsView(APIView):
 
         products_serializer = ProductsSerializer(products_model, many=True)
         return Response({
-            'min_price': min_price['res'],
+            'min_price': prices['min_price'],
+            'max_price': prices['max_price'],
             'products': products_serializer.data
         })
