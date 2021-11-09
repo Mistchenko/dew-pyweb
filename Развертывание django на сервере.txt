@@ -1,6 +1,7 @@
 Развертывание django на сервере
 
 sudo apt update && sudo apt upgrade -y
+
 sudo apt install python3-pip
 pip3 install django
 pip3 install djangorestframework
@@ -15,9 +16,9 @@ python3 ./manage.py runserver 0.0.0.0:8000
 Проверяем в браузере: http://{ip_address_server}:8000/
 Останавливаем сервис: Ctrl+C
 
-sudo ln -s ~/my_app/ /var/www/my_app
 
 Устанавливаем uWSGI
+sudo apt install python3-dev
 pip3 install uwsgi
 
 
@@ -33,6 +34,8 @@ sudo apt install nginx
 
 Установка и конфигурация supervisor
 sudo apt install supervisor
+
+sudo ln -s ~/my_app/ /var/www/my_app
 
 sudo ln -s ~/my_app/server.conf/app.supervisor.conf /etc/supervisor/conf.d/my_app.conf
 
