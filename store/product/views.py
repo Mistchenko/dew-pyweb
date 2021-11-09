@@ -20,7 +20,7 @@ class ProductsView(APIView):
             return Response(query_params.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # Пример с ИЛИ
-        # p1 = Q(group=1)
+        # p1 = Q(group=2)
         # p2 = Q(discount=0)
         # products_model = products_model.filter(p1 | p2)
 
